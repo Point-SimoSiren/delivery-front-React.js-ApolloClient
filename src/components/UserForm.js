@@ -1,15 +1,15 @@
 import React, { useState } from 'react'
 import { useMutation } from '@apollo/client'
 
-import { CREATE_PERSON } from '../queries'
+import { CREATE_USER } from '../queries'
 
-const PersonForm = ({ setError, updateCacheWith }) => {
+const UserForm = ({ setError, updateCacheWithUser }) => {
   const [name, setName] = useState('')
   const [phone, setPhone] = useState('')
   const [street, setStreet] = useState('')
   const [city, setCity] = useState('')
 
-  const [ createPerson ] = useMutation(CREATE_PERSON, {
+  const [createPerson] = useMutation(CREATE_USER, {
     onError: (error) => {
       setError(error.graphQLErrors[0].message)
     },
@@ -21,8 +21,8 @@ const PersonForm = ({ setError, updateCacheWith }) => {
   const submit = async (event) => {
     event.preventDefault()
     createPerson({
-      variables: { 
-        name, street, city, 
+      variables: {
+        name, street, city,
         phone: phone.length > 0 ? phone : null
       }
     })
@@ -67,4 +67,4 @@ const PersonForm = ({ setError, updateCacheWith }) => {
   )
 }
 
-export default PersonForm
+export default UserForm

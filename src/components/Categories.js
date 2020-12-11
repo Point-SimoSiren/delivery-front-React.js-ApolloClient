@@ -1,33 +1,32 @@
 import React, { useState, useEffect } from 'react'
 import { useLazyQuery } from '@apollo/client'
 
-import { FIND_PERSON } from '../queries'
+import { FIND_CATEGORY } from '../queries'
 
-const Persons = ({ persons }) => {
-  const [person, setPerson] = useState(null)
-  const [getPerson, result] = useLazyQuery(FIND_PERSON)
+const Categories = ({ persons }) => {
+  const [category, setCategory] = useState(null)
+  const [getCategory, result] = useLazyQuery(FIND_CATEGORY)
 
-  const showPerson = (name) => {
-    getPerson({ variables: { nameToSearch: name } })
+  const showCategory = (name) => {
+    getCategory({ variables: { nameToSearch: name } })
   }
 
   useEffect(() => {
     if (result.data) {
-      setPerson(result.data.findPerson)
+      setCategory(result.data.findCategory)
     }
   }, [result.data])
 
-  if (person) {
-    return(
+  if (category) {
+    return (
       <div>
-        <h2>{person.name}</h2>
-        <div>{person.address.street} {person.address.city}</div>
-        <div>{person.phone}</div>
-        <button onClick={() => setPerson(null)}>close</button>
+        <h2>{category.name}</h2>
+        <div>{category.description}</div>
+        <button onClick={() => setCategory(null)}>close</button>
       </div>
     )
   }
-  
+
   return (
     <div>
       <h2>Persons</h2>
@@ -36,11 +35,11 @@ const Persons = ({ persons }) => {
           {p.name} {p.phone}
           <button onClick={() => showPerson(p.name)} >
             show address
-          </button> 
-        </div>  
+          </button>
+        </div>
       )}
     </div>
   )
 }
 
-export default Persons
+export default Categories

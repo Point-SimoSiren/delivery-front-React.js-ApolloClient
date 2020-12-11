@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react'
 import { useQuery, useApolloClient, useSubscription } from '@apollo/client'
 import Categories from './components/Categories'
 import CategoryForm from './components/CategoryForm'
+import Users from './components/Users'
+import UserForm from './components/UserForm'
 import LoginForm from './components/LoginForm'
 import { ALL_CATEGORIES, CATEGORY_ADDED, ALL_USERS, USER_ADDED } from './queries'
 
@@ -26,10 +28,10 @@ const App = () => {
 
   const updateCacheWithCategory = (addedCategory) => {
     const includedIn = (set, object) =>
-      set.map(p => p.id).includes(object.id)
+      set.map(c => c.id).includes(object.id)
 
     const dataInStore = client.readQuery({ query: ALL_CATEGORIES })
-    if (!includedIn(dataInStore.allPersons, addedCategory)) {
+    if (!includedIn(dataInStore.allCategories, addedCategory)) {
       client.writeQuery({
         query: ALL_CATEGORIES,
         data: { allCategories: dataInStore.allCategories.concat(addedCategory) }
@@ -48,7 +50,7 @@ const App = () => {
 
   const updateCacheWithUser = (addedUser) => {
     const includedIn = (set, object) =>
-      set.map(p => p.id).includes(object.id)
+      set.map(u => u.id).includes(object.id)
 
     const dataInStore = client.readQuery({ query: ALL_USERS })
     if (!includedIn(dataInStore.allUsers, addedUser)) {
@@ -112,7 +114,7 @@ const App = () => {
       <center>
         <button onClick={logout} >logout</button>
         <Notify errorMessage={errorMessage} />
-        <Persons persons={result.data.allPersons} />
+        <Users users={usersList.data.allUsers} />
         <CategoryForm setError={notify} updateCacheWithCategory={updateCacheWithCategory} />
       </center>
     </div>

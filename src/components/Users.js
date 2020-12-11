@@ -1,41 +1,43 @@
 import React, { useState, useEffect } from 'react'
 import { useLazyQuery } from '@apollo/client'
 
-import { FIND_PERSON } from '../queries'
+import { FIND_USER } from '../queries'
 
-const Persons = ({ persons }) => {
-  const [person, setPerson] = useState(null)
-  const [getPerson, result] = useLazyQuery(FIND_PERSON)
+const Users = ({ users }) => {
+  const [user, setUser] = useState(null)
+  const [getUser, result] = useLazyQuery(FIND_USER)
 
-  const showPerson = (name) => {
-    getPerson({ variables: { nameToSearch: name } })
+  const showUser = (name) => {
+    getUser({ variables: { nameToSearch: name } })
   }
 
   useEffect(() => {
     if (result.data) {
-      setPerson(result.data.findPerson)
+      setPerson(result.data.findUser)
     }
   }, [result.data])
 
-  if (person) {
+  if (user) {
     return (
       <div>
-        <h2>{person.name}</h2>
-        <div>{person.address.street} {person.address.city}</div>
-        <div>{person.phone}</div>
-        <button onClick={() => setPerson(null)}>close</button>
+        <h3>{user.username}</h3>
+        <h3>{user.name}</h3>
+        <div>{user.address}</div>
+        <div>{user.phone}</div>
+        <div>{user.isAdmin}</div>
+        <button onClick={() => setUser(null)}>close</button>
       </div>
     )
   }
 
   return (
     <div>
-      <h2>Persons</h2>
-      {persons.map(p =>
-        <div key={p.name}>
-          {p.name} {p.phone}
-          <button onClick={() => showPerson(p.name)} >
-            show address
+      <h2>Users</h2>
+      {users.map(u =>
+        <div key={u.username}>
+          {u.username} | {u.name}
+          <button onClick={() => showUser(u.name)} >
+            show more
           </button>
         </div>
       )}
@@ -43,4 +45,4 @@ const Persons = ({ persons }) => {
   )
 }
 
-export default Persons
+export default Users

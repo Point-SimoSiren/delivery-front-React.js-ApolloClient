@@ -1,36 +1,31 @@
 import React, { useState } from 'react'
 import { useMutation } from '@apollo/client'
 
-import { CREATE_PERSON } from '../queries'
+import { CREATE_CATEGORY } from '../queries'
 
-const PersonForm = ({ setError, updateCacheWith }) => {
+const CategoryForm = ({ setError, updateCacheWithCategory }) => {
   const [name, setName] = useState('')
-  const [phone, setPhone] = useState('')
-  const [street, setStreet] = useState('')
-  const [city, setCity] = useState('')
+  const [description, setDescription] = useState('')
 
-  const [ createPerson ] = useMutation(CREATE_PERSON, {
+  const [createCategory] = useMutation(CREATE_CATEGORY, {
     onError: (error) => {
       setError(error.graphQLErrors[0].message)
     },
     update: (store, response) => {
-      updateCacheWith(response.data.addPerson)
+      updateCacheWithCategory(response.data.addCategory)
     }
   })
 
   const submit = async (event) => {
     event.preventDefault()
-    createPerson({
-      variables: { 
-        name, street, city, 
-        phone: phone.length > 0 ? phone : null
+    createCategory({
+      variables: {
+        name, description
       }
     })
 
     setName('')
-    setPhone('')
-    setStreet('')
-    setCity('')
+    setDescription('')
   }
 
   return (
@@ -44,21 +39,9 @@ const PersonForm = ({ setError, updateCacheWith }) => {
           />
         </div>
         <div>
-          phone <input
+          description <input
             value={phone}
             onChange={({ target }) => setPhone(target.value)}
-          />
-        </div>
-        <div>
-          street <input
-            value={street}
-            onChange={({ target }) => setStreet(target.value)}
-          />
-        </div>
-        <div>
-          city <input
-            value={city}
-            onChange={({ target }) => setCity(target.value)}
           />
         </div>
         <button type='submit'>add!</button>
@@ -67,4 +50,4 @@ const PersonForm = ({ setError, updateCacheWith }) => {
   )
 }
 
-export default PersonForm
+export default CategoryForm
